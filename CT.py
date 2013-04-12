@@ -7,6 +7,7 @@ import subprocess
 from dsf import trajectory_readers
 
 #TODO get initial parameters with argparse module
+#TODO select kvectors from from scalar
 
 """example for non-linear trajectories periodicity=weed"""
 path="/tmpmnt/home/titanic3/sfrey/LJ_800x10/system-A/NVT-system-A/T0.43/ana-trajectory/"
