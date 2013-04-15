@@ -27,10 +27,7 @@ weed=34
 #veltype=".vel.trj"
 #weed=1
 
-"""init var"""
-k=1
-ACL=[]
-ACT=[]
+
 
 def complex_to_line(CA):
     """
@@ -45,7 +42,7 @@ ytPath='/usr/local/opt/yasp03/bin/'
 tool='calc_cfav'
 options=" -ncol %i -c 2 -mfft -1  -m 1000000 "%(6+12+1)
 pinput,poutput=os.popen2(ytPath+tool+options)
-
+# """subprocess version for python 3"""
 #options=[ " -ncol %i "%(6+1),"-c 2 ","-mfft -1 "," -m 1000000 " ]
 #PIPE=subprocess.PIPE
 #args=[ytPath+tool]+options
@@ -53,7 +50,7 @@ pinput,poutput=os.popen2(ytPath+tool+options)
 #process=subprocess.Popen(args, bufsize=0, stdout=PIPE , stdin=PIPE)
 #pinput=process.stdin
 #poutput=process.stdout
-""" subprocess version for python 3"""
+
 def Jflux(v,p):
     """
     Mostly compute permutation
@@ -62,17 +59,26 @@ def Jflux(v,p):
     CT=[(v[0]*p[1]).sum(),(v[1]*p[2]).sum(),(v[2]*p[0]).sum(),
         (v[0]*p[2]).sum(),(v[1]*p[0]).sum(),(v[2]*p[1]).sum()]
     return array(CL),array(CT)
-"""
-nbst = numbert for short time analysis done ( sum/nbst = avg )
-CLST = accumate value of CT coorelation for short time
-CLZW = CL for last value of weed start ( reference t=0 )
-"""    
-frame=0
-nbst=0
-CLST={}
-CTST={}
-timev={}
-f=open('testout.txt','w')
+
+def __init__():
+    """
+    init variable
+    nbst = numbert for short time analysis done ( sum/nbst = avg )
+    CLST = accumate value of CT coorelation for short time
+    CLZW = CL for last value of weed start ( reference t=0 )
+    """ 
+    k=1
+    ACL=[]
+    ACT=[]
+    frame=0
+    nbst=0
+    CLST={}
+    CTST={}
+    timev={}
+    f=open('testout.txt','w')
+
+__init__()
+
 for ik in range(ii,ij):
     print 'working on trajectory %i/%i at frame %i'%(ik+1-ii,ij-ii,ik)
     pname=path+name+"."+str(ik)+postype
@@ -90,6 +96,7 @@ for ik in range(ii,ij):
         if (frame%weed == 0):
             nbst+=1
             twz=time
+            #BUG ik+x ? 
             CL,CT=Jflux(10*vel['x'],exp((0+1j)*k+10*pos['x']))
             CL,CT=CL/N,CT/N
             CLZW=CL
@@ -118,6 +125,7 @@ for ik in range(ii,ij):
         #ACT.append(CT)
     p.close()
     v.close()
+f.close()
 f.close()
 pinput.close()
 buff=poutput.readlines()
